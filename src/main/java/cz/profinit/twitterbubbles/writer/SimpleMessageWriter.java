@@ -1,4 +1,4 @@
-package cz.profinit.twitterbubbles;
+package cz.profinit.twitterbubbles.writer;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

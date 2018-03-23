@@ -1,5 +1,6 @@
-package cz.profinit.twitterbubbles;
+package cz.profinit.twitterbubbles.configuration;
 
+import cz.profinit.twitterbubbles.writer.SimpleMessageWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
