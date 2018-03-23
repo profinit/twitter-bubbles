@@ -1,6 +1,8 @@
 package cz.profinit.twitterbubbles.configuration;
 
-import cz.profinit.twitterbubbles.writer.SimpleMessageWriter;
+import cz.profinit.twitterbubbles.processing.FluxStatsWriter;
+import cz.profinit.twitterbubbles.streaming.TweetStatsFluxFactory;
+import cz.profinit.twitterbubbles.writer.SimpleTweetWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -11,7 +13,13 @@ public class TwitterBubblesConfiguration {
 
     @Bean
     @Profile("writer")
-    public SimpleMessageWriter simpleMessageWriter(TwitterTemplate twitterTemplate) {
-        return new SimpleMessageWriter(twitterTemplate);
+    public SimpleTweetWriter simpleTweetWriter(TwitterTemplate twitterTemplate) {
+        return new SimpleTweetWriter(twitterTemplate);
+    }
+
+    @Bean
+    @Profile("fluxStatsWriter")
+    public FluxStatsWriter fluxStatsWriter(TweetStatsFluxFactory dummy) {
+        return new FluxStatsWriter(dummy);
     }
 }

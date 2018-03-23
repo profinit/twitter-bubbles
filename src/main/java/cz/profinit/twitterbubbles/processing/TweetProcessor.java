@@ -20,15 +20,12 @@ public class TweetProcessor {
 
         Map<String, Integer> wordCounts = countWords(words);
 
-        return new TweetStats(wordCounts);
+        return new TweetStats(text, wordCounts);
     }
 
     List<String> words(String text) {
         String[] words = text.split("\\s+");
         for (int i = 0; i < words.length; i++) {
-            // You may want to check for a non-word character before blindly
-            // performing a replacement
-            // It may also be necessary to adjust the character class
             words[i] = words[i].replaceAll("[^\\w]", "");
         }
         return Arrays.asList(words);
