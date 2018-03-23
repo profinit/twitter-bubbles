@@ -1,12 +1,16 @@
 package cz.profinit.twitterbubbles.processing;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TweetStats {
 
-    private final String text;
-    private final Map<String, Integer> wordCounts;
+    private String text;
+    private Map<String, Integer> wordCounts;
 }

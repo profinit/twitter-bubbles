@@ -1,5 +1,6 @@
 package cz.profinit.twitterbubbles.configuration;
 
+import cz.profinit.twitterbubbles.client.TwitterStatsClient;
 import cz.profinit.twitterbubbles.processing.FluxStatsWriter;
 import cz.profinit.twitterbubbles.streaming.TweetStatsFluxFactory;
 import cz.profinit.twitterbubbles.writer.SimpleTweetWriter;
@@ -21,5 +22,11 @@ public class TwitterBubblesConfiguration {
     @Profile("fluxStatsWriter")
     public FluxStatsWriter fluxStatsWriter(TweetStatsFluxFactory dummy) {
         return new FluxStatsWriter(dummy);
+    }
+
+    @Bean
+    @Profile("standaloneClient")
+    public TwitterStatsClient twitterStatsClient() {
+        return new TwitterStatsClient();
     }
 }
