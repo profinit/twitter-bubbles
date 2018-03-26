@@ -1,17 +1,16 @@
 package cz.profinit.twitterbubbles.processing;
 
-import cz.profinit.twitterbubbles.streaming.TweetStatsFluxFactory;
+import cz.profinit.twitterbubbles.streaming.TweetStatsStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 
 @RequiredArgsConstructor
 public class FluxStatsWriter implements CommandLineRunner {
 
-    private final TweetStatsFluxFactory tweetStatsFluxFactory;
+    private final TweetStatsStream tweetStatsStream;
 
     @Override
     public void run(String... args) {
-        tweetStatsFluxFactory.createTweetStatsFlux()
-                .subscribe(System.out::println);
+        tweetStatsStream.getTweetStats().subscribe(System.out::println);
     }
 }

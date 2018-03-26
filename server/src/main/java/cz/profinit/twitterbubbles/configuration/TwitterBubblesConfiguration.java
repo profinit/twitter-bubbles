@@ -1,7 +1,7 @@
 package cz.profinit.twitterbubbles.configuration;
 
 import cz.profinit.twitterbubbles.processing.FluxStatsWriter;
-import cz.profinit.twitterbubbles.streaming.TweetStatsFluxFactory;
+import cz.profinit.twitterbubbles.streaming.TweetStatsStream;
 import cz.profinit.twitterbubbles.writer.SimpleTweetWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ public class TwitterBubblesConfiguration {
 
     @Bean
     @Profile("fluxStatsWriter")
-    public FluxStatsWriter fluxStatsWriter(TweetStatsFluxFactory dummy) {
-        return new FluxStatsWriter(dummy);
+    public FluxStatsWriter fluxStatsWriter(TweetStatsStream tweetStatsStream) {
+        return new FluxStatsWriter(tweetStatsStream);
     }
 }
