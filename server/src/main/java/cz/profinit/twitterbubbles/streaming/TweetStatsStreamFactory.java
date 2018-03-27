@@ -21,7 +21,7 @@ public class TweetStatsStreamFactory extends AbstractFactoryBean<TweetStatsStrea
     private TweetProcessor processor;
 
     @Override
-    protected TweetStatsStream createInstance() throws Exception {
+    protected TweetStatsStream createInstance() {
         log.info("Creating tweet stats stream");
 
         Flux<TweetStats> flux = tweetStream.getTweets().map(processor::processTweet);
