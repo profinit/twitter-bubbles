@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 import org.springframework.lang.Nullable;
-import org.springframework.social.twitter.api.Stream;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.stereotype.Component;
@@ -26,7 +25,12 @@ public class TweetStreamFactory extends AbstractFactoryBean<TweetStream> {
     protected TweetStream createInstance() {
         log.info("Creating tweet stream");
 
-        Flux<Tweet> flux = Flux.create(this::createEmiiter);
+        Flux<Tweet> flux = Flux.create(
+                sink -> {
+                    log.info("Streaming Twitter sample data");
+                    twitterTemplate.streamingOperations().sample(singletonList(new TwitterToFluxStreamListener(sink)));
+                },
+                FluxSink.OverflowStrategy.DROP);
 
         return TweetStream.of(flux);
     }
@@ -35,10 +39,5 @@ public class TweetStreamFactory extends AbstractFactoryBean<TweetStream> {
     @Override
     public Class<?> getObjectType() {
         return TweetStream.class;
-    }
-
-    private Stream createEmiiter(FluxSink<Tweet> sink) {
-        log.info("Streaming Twitter sample data");
-        return twitterTemplate.streamingOperations().sample(singletonList(new TwitterToFluxStreamListener(sink)));
     }
 }
