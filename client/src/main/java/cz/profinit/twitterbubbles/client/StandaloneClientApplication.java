@@ -1,23 +1,21 @@
 package cz.profinit.twitterbubbles.client;
 
 import cz.profinit.twitterbubbles.model.TopWords;
-import cz.profinit.twitterbubbles.model.TweetStats;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 
 @Slf4j
 public class StandaloneClientApplication {
 
     public static void main(String[] args) throws InterruptedException {
-        Flux<TweetStats> tweetStatsFlux = WebClient.create("http://localhost:8080/tweet-stats")
-                .method(HttpMethod.GET)
-                .accept(MediaType.TEXT_EVENT_STREAM)
-                .retrieve()
-                .bodyToFlux(TweetStats.class);
+//        Flux<TweetStats> tweetStatsFlux = WebClient.create("http://localhost:8080/tweet-stats")
+//                .method(HttpMethod.GET)
+//                .accept(MediaType.TEXT_EVENT_STREAM)
+//                .retrieve()
+//                .bodyToFlux(TweetStats.class);
 
         Flux<TopWords> topWordsFlux = WebClient.create("http://localhost:8080/top-words")
                 .method(HttpMethod.GET)
@@ -27,7 +25,7 @@ public class StandaloneClientApplication {
 
         System.out.println("Starting streaming");
 
-        Disposable subscription = tweetStatsFlux.subscribe(System.out::println);
+//        Disposable subscription = tweetStatsFlux.subscribe(System.out::println);
 
         topWordsFlux.subscribe(System.out::println);
 

@@ -25,12 +25,13 @@ public class TweetStreamFactory extends AbstractFactoryBean<TweetStream> {
     protected TweetStream createInstance() {
         log.info("Creating tweet stream");
 
-        Flux<Tweet> flux = Flux.create(
+        Flux<Tweet> flux = Flux.<Tweet>create(
                 sink -> {
                     log.info("Streaming Twitter sample data");
                     twitterTemplate.streamingOperations().sample(singletonList(new TwitterToFluxStreamListener(sink)));
                 },
-                FluxSink.OverflowStrategy.DROP);
+                FluxSink.OverflowStrategy.DROP)
+                .log();
 
         return TweetStream.of(flux);
     }

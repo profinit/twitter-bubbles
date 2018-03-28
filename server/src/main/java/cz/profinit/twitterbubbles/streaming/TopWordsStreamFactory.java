@@ -22,7 +22,7 @@ public class TopWordsStreamFactory extends AbstractFactoryBean<TopWordsStream> {
     protected TopWordsStream createInstance() {
         log.info("Creating top word stream");
 
-        Flux<TopWords> flux = Flux.create(
+        Flux<TopWords> flux = Flux.<TopWords>create(
                 sink ->
                         tweetStatsStream.getTweetStats().subscribe(tweetStats -> {
                             wordCountProcessor.processTweetStats(tweetStats);
@@ -30,7 +30,8 @@ public class TopWordsStreamFactory extends AbstractFactoryBean<TopWordsStream> {
                                 sink.next(wordCountProcessor.getTopWords());
                             }
                         }),
-                FluxSink.OverflowStrategy.DROP);
+                FluxSink.OverflowStrategy.DROP)
+                .log();
 
         return TopWordsStream.of(flux);
     }
