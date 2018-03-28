@@ -2,7 +2,6 @@ package cz.profinit.twitterbubbles.streaming;
 
 import cz.profinit.twitterbubbles.model.TweetStats;
 import cz.profinit.twitterbubbles.processing.TweetProcessor;
-import cz.profinit.twitterbubbles.processing.WordCountProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +19,12 @@ public class TweetStatsStreamFactory extends AbstractFactoryBean<TweetStatsStrea
     private TweetStream tweetStream;
     @Autowired
     private TweetProcessor processor;
-    @Autowired
-    private WordCountProcessor wordCountProcessor;
 
     @Override
     protected TweetStatsStream createInstance() {
         log.info("Creating tweet stats stream");
 
         Flux<TweetStats> flux = tweetStream.getTweets().map(processor::processTweet);
-
-        flux.subscribe(tweetStats -> wordCountProcessor.addWordCounts(tweetStats.getWordCounts()));
 
         return TweetStatsStream.of(flux);
     }
