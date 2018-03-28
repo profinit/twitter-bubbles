@@ -24,7 +24,9 @@ public class TweetStatsStreamFactory extends AbstractFactoryBean<TweetStatsStrea
     protected TweetStatsStream createInstance() {
         log.info("Creating tweet stats stream");
 
-        Flux<TweetStats> flux = tweetStream.getTweets().map(processor::processTweet).log();
+        Flux<TweetStats> flux = tweetStream.getTweets()
+                .map(processor::processTweet)
+                .log(FluxLogger.getCategory());
 
         return TweetStatsStream.of(flux);
     }

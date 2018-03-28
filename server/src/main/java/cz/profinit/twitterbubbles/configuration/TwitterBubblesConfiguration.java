@@ -12,7 +12,7 @@ import org.springframework.social.twitter.api.impl.TwitterTemplate;
 public class TwitterBubblesConfiguration {
 
     @Bean
-    @Profile("writer")
+    @Profile("simpleTweetWriter")
     public SimpleTweetWriter simpleTweetWriter(TwitterTemplate twitterTemplate) {
         return new SimpleTweetWriter(twitterTemplate);
     }

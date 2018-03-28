@@ -9,14 +9,19 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 @Component
 @Slf4j
 public class TopWordsStreamFactory extends AbstractFactoryBean<TopWordsStream> {
 
     @Autowired
     private TweetStatsStream tweetStatsStream;
+
     @Autowired
     private WordCountProcessor wordCountProcessor;
+
+    private final AtomicInteger counter = new AtomicInteger(1);
 
     @Override
     protected TopWordsStream createInstance() {
@@ -27,11 +32,12 @@ public class TopWordsStreamFactory extends AbstractFactoryBean<TopWordsStream> {
                         tweetStatsStream.getTweetStats().subscribe(tweetStats -> {
                             wordCountProcessor.processTweetStats(tweetStats);
                             if (wordCountProcessor.getProcessedTweetStatsCount() % 10 == 0) {
+                                log.debug("Putting top words number {} to sink", counter.getAndIncrement());
                                 sink.next(wordCountProcessor.getTopWords());
                             }
                         }),
                 FluxSink.OverflowStrategy.DROP)
-                .log();
+                .log(FluxLogger.getCategory());
 
         return TopWordsStream.of(flux);
     }

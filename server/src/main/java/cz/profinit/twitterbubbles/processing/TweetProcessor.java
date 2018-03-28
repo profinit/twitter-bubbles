@@ -1,20 +1,27 @@
 package cz.profinit.twitterbubbles.processing;
 
 import cz.profinit.twitterbubbles.model.TweetStats;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.reducing;
 
 @Component
+@Slf4j
 public class TweetProcessor {
 
+    private final AtomicInteger counter = new AtomicInteger(1);
+
     public TweetStats processTweet(Tweet tweet) {
+        log.debug("Processing tweet number {}. Id: {}", counter.getAndIncrement(), tweet.getId());
+
         String text = tweet.getText();
 
         List<String> words = words(text);

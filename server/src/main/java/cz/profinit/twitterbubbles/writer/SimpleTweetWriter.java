@@ -19,7 +19,7 @@ public class SimpleTweetWriter implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        StreamListener streamListener = new TwitterStreamListenerSupport() {
+        StreamListener streamListener = new TwitterStreamListenerSupport(log) {
             public void onTweet(Tweet tweet) {
                 String hashTags = tweet.getEntities().getHashTags().stream()
                         .map(hashTagEntity -> "#" + hashTagEntity.getText())
