@@ -8,6 +8,7 @@ import cz.profinit.twitterbubbles.streaming.TweetStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.social.twitter.api.Tweet;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import reactor.core.publisher.Flux;
 import java.io.IOException;
 
 @RestController
+@CrossOrigin
 @RequiredArgsConstructor
 @Slf4j
 public class StreamController {

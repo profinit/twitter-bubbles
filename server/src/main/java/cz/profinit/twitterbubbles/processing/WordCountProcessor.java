@@ -1,8 +1,10 @@
 package cz.profinit.twitterbubbles.processing;
 
+import cz.profinit.twitterbubbles.TwitterBubblesProperties;
 import cz.profinit.twitterbubbles.model.TopWords;
 import cz.profinit.twitterbubbles.model.TweetStats;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -19,13 +21,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class WordCountProcessor {
 
-    private static final int MIN_WORD_LENGTH = 3;
-    private static final int TWEET_STATS_COUNT_TO_TRIGGER_TOP_WORD_UPDATE = 10;
-    private static final int TOP_WORD_COUNT_TO_KEEP = 100;
-    private static final int TOP_WORD_COUNT_TO_TRIGGER_PRUNING = 200;
+    private final TwitterBubblesProperties properties;
 
     @Getter
     private final Map<String, Integer> wordCount = new HashMap<>();
@@ -37,7 +37,7 @@ public class WordCountProcessor {
     private List<String> topWords = Collections.emptyList();
 
     public TopWords getTopWords() {
-        Map<String, Integer> topWordMap = topWords.subList(0, Math.min(TOP_WORD_COUNT_TO_KEEP, topWords.size())).stream()
+        Map<String, Integer> topWordMap = topWords.subList(0, Math.min(properties.getTopWordCountToKeep(), topWords.size())).stream()
                 .collect(Collectors.toMap(Function.identity(), wordCount::get, (a, b) -> a, LinkedHashMap::new));
 
         return new TopWords(topWordMap);
@@ -47,7 +47,7 @@ public class WordCountProcessor {
         for (Map.Entry<String, Integer> entry : tweetStats.getWordCounts().entrySet()) {
             String word = entry.getKey();
             int count = entry.getValue();
-            if (word.length() >= MIN_WORD_LENGTH) {
+            if (word.length() >= properties.getMinWordLength()) {
                 wordCount.merge(word, count, (oldValue, value) -> oldValue + value);
                 allWords.add(word);
             }
@@ -55,12 +55,12 @@ public class WordCountProcessor {
 
         processedTweetStatsCount++;
 
-        if (processedTweetStatsCount % TWEET_STATS_COUNT_TO_TRIGGER_TOP_WORD_UPDATE == 0) {
+        if (processedTweetStatsCount % properties.getTweetStatsCountToTriggerTopWordsUpdate() == 0) {
             topWords = new ArrayList<>(allWords);
             topWords.sort(wordCountComparator);
 
-            if (topWords.size() > TOP_WORD_COUNT_TO_TRIGGER_PRUNING) {
-                topWords.subList(TOP_WORD_COUNT_TO_KEEP, topWords.size()).forEach(word -> {
+            if (topWords.size() > properties.getTopWordCountToTriggerPruning()) {
+                topWords.subList(properties.getTopWordCountToKeep(), topWords.size()).forEach(word -> {
                     wordCount.remove(word);
                     allWords.remove(word);
                 });
