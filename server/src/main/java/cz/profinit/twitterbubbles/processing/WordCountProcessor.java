@@ -4,9 +4,7 @@ import cz.profinit.twitterbubbles.TwitterBubblesProperties;
 import cz.profinit.twitterbubbles.model.TopWords;
 import cz.profinit.twitterbubbles.model.TweetStats;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,8 +18,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Component
-@RequiredArgsConstructor
 @Slf4j
 public class WordCountProcessor {
 
@@ -35,6 +31,11 @@ public class WordCountProcessor {
     @Getter
     private int processedTweetStatsCount = 0;
     private List<String> topWords = Collections.emptyList();
+
+    public WordCountProcessor(TwitterBubblesProperties properties) {
+        this.properties = properties;
+        log.debug("Creating word count processor");
+    }
 
     public TopWords getTopWords() {
         Map<String, Integer> topWordMap = topWords.subList(0, Math.min(properties.getTopWordCountToKeep(), topWords.size())).stream()

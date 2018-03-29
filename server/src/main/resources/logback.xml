@@ -32,6 +32,7 @@
 
     <logger name="org.springframework" level="INFO"/>
     <logger name="cz.profinit" level="DEBUG"/>
+    <!--<logger name="cz.profinit.twitterbubbles.streaming.TwitterListener" level="TRACE"/>-->
 
     <logger name="cz.profinit.twitterbubbles.streaming.TweetStream" additivity="false">
         <appender-ref ref="TWEET_FLUX"/>
