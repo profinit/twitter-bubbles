@@ -4,21 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class TopWords {
 
-    private List<WordCount> topWords;
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class WordCount {
-
-        private String word;
-        private int count;
-    }
+    private Map<String, Integer> topWords;
 }

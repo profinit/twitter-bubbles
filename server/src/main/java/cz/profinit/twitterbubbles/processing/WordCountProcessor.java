@@ -11,9 +11,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
@@ -35,11 +37,10 @@ public class WordCountProcessor {
     private List<String> topWords = Collections.emptyList();
 
     public TopWords getTopWords() {
-        List<TopWords.WordCount> wordCounts = topWords.subList(0, Math.min(TOP_WORD_COUNT_TO_KEEP, topWords.size())).stream()
-                .map(word -> new TopWords.WordCount(word, wordCount.get(word)))
-                .collect(Collectors.toList());
+        Map<String, Integer> topWordMap = topWords.subList(0, Math.min(TOP_WORD_COUNT_TO_KEEP, topWords.size())).stream()
+                .collect(Collectors.toMap(Function.identity(), wordCount::get, (a, b) -> a, LinkedHashMap::new));
 
-        return new TopWords(wordCounts);
+        return new TopWords(topWordMap);
     }
 
     public synchronized void processTweetStats(TweetStats tweetStats) {
