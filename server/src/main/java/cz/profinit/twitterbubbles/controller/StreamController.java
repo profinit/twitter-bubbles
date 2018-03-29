@@ -46,6 +46,6 @@ public class StreamController {
 
     @ExceptionHandler(IOException.class)
     public void handleException(IOException e) {
-        log.warn("IOException ocurred: {}", e.getMessage());
+        log.warn("IOException occurred: {}", e.getMessage());
     }
 }
