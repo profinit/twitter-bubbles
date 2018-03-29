@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <appender name="TWEET_FLUX" class="ch.qos.logback.core.FileAppender">
+        <file>tweet-flux.log</file>
+        <append>false</append>
+        <immediateFlush>false</immediateFlush>
+        <encoder>
+            <pattern>%date [%thread] %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="TWEET_STATS_FLUX" class="ch.qos.logback.core.FileAppender">
+        <file>tweet-stats-flux.log</file>
+        <append>false</append>
+        <immediateFlush>false</immediateFlush>
+        <encoder>
+            <pattern>%date [%thread] %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="TOP_WORDS_FLUX" class="ch.qos.logback.core.FileAppender">
+        <file>top-words-flux.log</file>
+        <append>false</append>
+        <immediateFlush>false</immediateFlush>
+        <encoder>
+            <pattern>%date [%thread] %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <logger name="org.springframework" level="INFO"/>
     <logger name="cz.profinit" level="DEBUG"/>
+
+    <logger name="cz.profinit.twitterbubbles.streaming.TweetStream" additivity="false">
+        <appender-ref ref="TWEET_FLUX"/>
+    </logger>
+
+    <logger name="cz.profinit.twitterbubbles.streaming.TweetStatsStream" additivity="false">
+        <appender-ref ref="TWEET_STATS_FLUX"/>
+    </logger>
+
+    <logger name="cz.profinit.twitterbubbles.streaming.TopWordsStream" additivity="false">
+        <appender-ref ref="TOP_WORDS_FLUX"/>
+    </logger>
+
 </configuration>

@@ -37,7 +37,7 @@ public class TopWordsStreamFactory extends AbstractFactoryBean<TopWordsStream> {
                             }
                         }),
                 FluxSink.OverflowStrategy.DROP)
-                .log(FluxLogger.getCategory());
+                .log(TopWordsStream.getLoggerName());
 
         return TopWordsStream.of(flux);
     }

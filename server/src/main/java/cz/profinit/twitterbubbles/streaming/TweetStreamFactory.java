@@ -31,7 +31,7 @@ public class TweetStreamFactory extends AbstractFactoryBean<TweetStream> {
                     twitterTemplate.streamingOperations().sample(singletonList(new TwitterToFluxStreamListener(sink)));
                 },
                 FluxSink.OverflowStrategy.DROP)
-                .log(FluxLogger.getCategory());
+                .log(TweetStream.getLoggerName());
 
         return TweetStream.of(flux);
     }
