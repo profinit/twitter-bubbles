@@ -11,13 +11,13 @@ import reactor.core.publisher.Flux;
 public class StandaloneClientApplication {
 
     public static void main(String[] args) throws InterruptedException {
-//        Flux<TweetStats> tweetStatsFlux = WebClient.create("http://localhost:8080/tweet-stats")
+//        Flux<TweetStats> tweetStatsFlux = WebClient.create("http://localhost:8080/twitter-bubbles/tweet-stats")
 //                .method(HttpMethod.GET)
 //                .accept(MediaType.TEXT_EVENT_STREAM)
 //                .retrieve()
 //                .bodyToFlux(TweetStats.class);
 
-        Flux<TopWords> topWordsFlux = WebClient.create("http://localhost:8080/top-words")
+        Flux<TopWords> topWordsFlux = WebClient.create("http://localhost:8080/twitter-bubbles/top-words")
                 .method(HttpMethod.GET)
                 .accept(MediaType.TEXT_EVENT_STREAM)
                 .retrieve()
