@@ -19,7 +19,7 @@ public class TwitterToFluxStreamListener extends TwitterStreamListenerSupport {
 
     @Override
     public void onTweet(Tweet tweet) {
-        log.debug("Putting tweet number {} to sink. Id: {}", counter++, tweet.getId());
+        log.trace("Putting tweet number {} to sink. Id: {}", counter++, tweet.getId());
         sink.next(tweet);
     }
 }

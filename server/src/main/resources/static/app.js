@@ -31,8 +31,8 @@ function drawBubbleChart(root) {
     //
     // How big the chart is
     //
-    var width = 1680;
-    var height= 1050;
+    var width = 960;
+    var height= 960;
 
     //
     // Pick some colours for the categories (groups)

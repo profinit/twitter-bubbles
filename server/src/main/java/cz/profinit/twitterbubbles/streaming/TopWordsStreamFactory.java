@@ -31,7 +31,7 @@ public class TopWordsStreamFactory {
                 sink -> tweetStatsStream.getTweetStats().subscribe(tweetStats -> {
                     wordCountProcessor.processTweetStats(tweetStats);
                     if (wordCountProcessor.getProcessedTweetStatsCount() % properties.getTweetStatsCountToTriggerTopWordsUpdate() == 0) {
-                        log.debug("Putting top words number {} to sink", counter.getAndIncrement());
+                        log.trace("Putting top words number {} to sink", counter.getAndIncrement());
                         sink.next(wordCountProcessor.getTopWords());
                     }
                 }),

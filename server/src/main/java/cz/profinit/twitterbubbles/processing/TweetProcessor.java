@@ -20,7 +20,7 @@ public class TweetProcessor {
     private final AtomicInteger counter = new AtomicInteger(1);
 
     public TweetStats processTweet(Tweet tweet) {
-        log.debug("Processing tweet number {}. Id: {}", counter.getAndIncrement(), tweet.getId());
+        log.trace("Processing tweet number {}. Id: {}", counter.getAndIncrement(), tweet.getId());
 
         String text = tweet.getText();
 
