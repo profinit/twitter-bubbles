@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +12,8 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TweetStats {
+
+    public static TweetStats EMPTY = new TweetStats(Collections.emptyMap());
 
     private Map<String, Integer> wordCounts;
 

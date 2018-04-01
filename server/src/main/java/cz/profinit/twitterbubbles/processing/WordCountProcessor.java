@@ -15,7 +15,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -32,42 +31,33 @@ public class WordCountProcessor {
     @Getter
     private int processedTweetStatsCount = 0;
     private List<String> topWords = Collections.emptyList();
-    private AtomicInteger topWordsIndex = new AtomicInteger(1);
 
     public WordCountProcessor(TwitterBubblesProperties properties) {
         this.properties = properties;
         log.debug("Creating word count processor");
     }
 
-    public TopWords getTopWords() {
-        Map<String, Integer> topWordMap = topWords.subList(0, Math.min(properties.getTopWordCountToKeep(), topWords.size())).stream()
-                .collect(Collectors.toMap(Function.identity(), wordCount::get, (a, b) -> a, LinkedHashMap::new));
-
-        return new TopWords(topWordsIndex.getAndIncrement(), topWordMap);
-    }
-
-    /**
-     *
-     * @param tweetStats Tweet stats to include.
-     * @return {@code true}, if the top words have been updated.
-     */
-    public synchronized boolean processTweetStats(TweetStats tweetStats) {
+    public synchronized TopWords processTweetStats(TweetStats tweetStats) {
         processedTweetStatsCount++;
 
         log.trace("Processing tweet stats number {}", processedTweetStatsCount);
         updateWordCount(tweetStats);
 
-        boolean shouldUpdateTopWords = processedTweetStatsCount % properties.getTweetStatsCountToTriggerTopWordsUpdate() == 0;
-        if (shouldUpdateTopWords) {
-            updateTopWords();
-        }
+        updateTopWords();
 
         boolean shouldPruneTopWords = topWords.size() > properties.getTopWordCountToTriggerPruning();
         if (shouldPruneTopWords) {
             pruneTopWords();
         }
 
-        return shouldUpdateTopWords;
+        return getTopWords();
+    }
+
+    private TopWords getTopWords() {
+        Map<String, Integer> topWordMap = topWords.subList(0, Math.min(properties.getTopWordCountToKeep(), topWords.size())).stream()
+                .collect(Collectors.toMap(Function.identity(), wordCount::get, (a, b) -> a, LinkedHashMap::new));
+
+        return new TopWords(topWordMap);
     }
 
     private void updateWordCount(TweetStats tweetStats) {

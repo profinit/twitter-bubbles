@@ -1,9 +1,7 @@
 package cz.profinit.twitterbubbles.controller;
 
 import cz.profinit.twitterbubbles.model.TopWords;
-import cz.profinit.twitterbubbles.model.TweetStats;
-import cz.profinit.twitterbubbles.streaming.TopWordsStream;
-import cz.profinit.twitterbubbles.streaming.TweetStatsStream;
+import cz.profinit.twitterbubbles.streaming.TopWordsStreamFactory;
 import cz.profinit.twitterbubbles.streaming.TweetStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +21,7 @@ import java.io.IOException;
 public class StreamController {
 
     private final TweetStream tweetStream;
-    private final TweetStatsStream tweetStatsStream;
-    private final TopWordsStream topWordsStream;
+    private final TopWordsStreamFactory topWordsStreamFactory;
 
     @GetMapping("/tweets")
     public Flux<Tweet> streamTweets() {
@@ -32,16 +29,10 @@ public class StreamController {
         return tweetStream.getTweets();
     }
 
-    @GetMapping("/tweet-stats")
-    public Flux<TweetStats> streamStats() {
-        log.info("Streaming stats");
-        return tweetStatsStream.getTweetStats();
-    }
-
     @GetMapping("/top-words")
     public Flux<TopWords> streamTopWords() {
         log.info("Streaming top words");
-        return topWordsStream.getTopWords();
+        return topWordsStreamFactory.createTopWordsStream();
     }
 
     @ExceptionHandler(IOException.class)
