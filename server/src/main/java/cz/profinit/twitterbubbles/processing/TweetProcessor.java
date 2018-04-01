@@ -22,13 +22,11 @@ public class TweetProcessor {
     public TweetStats processTweet(Tweet tweet) {
         log.trace("Processing tweet number {}. Id: {}", counter.getAndIncrement(), tweet.getId());
 
-        String text = tweet.getText();
-
-        List<String> words = words(text);
+        List<String> words = words(tweet.getText());
 
         Map<String, Integer> wordCounts = countWords(words);
 
-        return new TweetStats(text, wordCounts);
+        return new TweetStats(wordCounts);
     }
 
     List<String> words(String text) {

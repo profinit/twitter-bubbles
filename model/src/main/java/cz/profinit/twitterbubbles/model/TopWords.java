@@ -11,5 +11,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class TopWords {
 
+    private int index;
     private Map<String, Integer> topWords;
 }

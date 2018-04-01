@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,7 @@ public class WordCountProcessor {
     @Getter
     private int processedTweetStatsCount = 0;
     private List<String> topWords = Collections.emptyList();
+    private AtomicInteger topWordsIndex = new AtomicInteger(1);
 
     public WordCountProcessor(TwitterBubblesProperties properties) {
         this.properties = properties;
@@ -41,10 +43,34 @@ public class WordCountProcessor {
         Map<String, Integer> topWordMap = topWords.subList(0, Math.min(properties.getTopWordCountToKeep(), topWords.size())).stream()
                 .collect(Collectors.toMap(Function.identity(), wordCount::get, (a, b) -> a, LinkedHashMap::new));
 
-        return new TopWords(topWordMap);
+        return new TopWords(topWordsIndex.getAndIncrement(), topWordMap);
     }
 
-    public synchronized void processTweetStats(TweetStats tweetStats) {
+    /**
+     *
+     * @param tweetStats Tweet stats to include.
+     * @return {@code true}, if the top words have been updated.
+     */
+    public synchronized boolean processTweetStats(TweetStats tweetStats) {
+        processedTweetStatsCount++;
+
+        log.trace("Processing tweet stats number {}", processedTweetStatsCount);
+        updateWordCount(tweetStats);
+
+        boolean shouldUpdateTopWords = processedTweetStatsCount % properties.getTweetStatsCountToTriggerTopWordsUpdate() == 0;
+        if (shouldUpdateTopWords) {
+            updateTopWords();
+        }
+
+        boolean shouldPruneTopWords = topWords.size() > properties.getTopWordCountToTriggerPruning();
+        if (shouldPruneTopWords) {
+            pruneTopWords();
+        }
+
+        return shouldUpdateTopWords;
+    }
+
+    private void updateWordCount(TweetStats tweetStats) {
         for (Map.Entry<String, Integer> entry : tweetStats.getWordCounts().entrySet()) {
             String word = entry.getKey();
             int count = entry.getValue();
@@ -53,19 +79,21 @@ public class WordCountProcessor {
                 allWords.add(word);
             }
         }
+    }
 
-        processedTweetStatsCount++;
+    private void updateTopWords() {
+        topWords = new ArrayList<>(allWords);
+        topWords.sort(wordCountComparator);
+    }
 
-        if (processedTweetStatsCount % properties.getTweetStatsCountToTriggerTopWordsUpdate() == 0) {
-            topWords = new ArrayList<>(allWords);
-            topWords.sort(wordCountComparator);
+    private void pruneTopWords() {
+        List<String> wordsToRemove = topWords.subList(properties.getTopWordCountToKeep(), topWords.size());
 
-            if (topWords.size() > properties.getTopWordCountToTriggerPruning()) {
-                topWords.subList(properties.getTopWordCountToKeep(), topWords.size()).forEach(word -> {
-                    wordCount.remove(word);
-                    allWords.remove(word);
-                });
-            }
-        }
+        topWords = topWords.subList(0, properties.getTopWordCountToKeep());
+
+        wordsToRemove.forEach(word -> {
+            wordCount.remove(word);
+            allWords.remove(word);
+        });
     }
 }

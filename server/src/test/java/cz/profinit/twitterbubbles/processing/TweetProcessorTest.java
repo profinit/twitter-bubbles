@@ -93,12 +93,15 @@ public class TweetProcessorTest {
     @Test
     public void shouldProcessTweet() {
         for (WordSplitTestCase testCase : testCases) {
-            Tweet tweet = new Tweet(1L, testCase.text, new Date(), "user", "url", 1L, 1L, "x", "s");
-            TweetStats tweetStats = processor.processTweet(tweet);
+            TweetStats tweetStats = processor.processTweet(tweet(testCase));
 
             assertNotNull("Null tweet stats", tweetStats);
             assertEquals("Expected different word counts", testCase.wordCounts, tweetStats.getWordCounts());
         }
+    }
+
+    private Tweet tweet(WordSplitTestCase testCase) {
+        return new Tweet(1L, testCase.text, new Date(), "user", "url", 1L, 1L, "x", "s");
     }
 
     @Data(staticConstructor = "of")
