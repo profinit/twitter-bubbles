@@ -1,0 +1,19 @@
+
+.content {
+    width: 100%;
+}
+
+.bubbles {
+    width: 60%;
+    float: left;
+}
+
+.tweets {
+    width: 40%;
+    float: left;
+    font-size: x-small;
+}
+
+.tweets .tweet .from-user {
+    color: blueviolet;
+}

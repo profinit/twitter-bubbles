@@ -34,13 +34,11 @@ public class WordCountProcessor {
 
     public WordCountProcessor(TwitterBubblesProperties properties) {
         this.properties = properties;
-        log.debug("Creating word count processor");
     }
 
     public synchronized TopWords processTweetStats(TweetStats tweetStats) {
         processedTweetStatsCount++;
 
-        log.trace("Processing tweet stats number {}", processedTweetStatsCount);
         updateWordCount(tweetStats);
 
         updateTopWords();

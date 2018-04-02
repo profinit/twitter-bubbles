@@ -1,17 +1,17 @@
 
-var openStream = function() {
+var openTopWordsStream = function() {
     // {"topWords":
     //   {"you":8,"the":8,"que":4,"people":3,"this":3,"its":3,"bir":3,"dan":3,"about":2,"via":2,"daha":2,"perempuan":2,"natproductsshow":2,"brahmin":2,"kldaroluna":2}
     // }
     var eventSource = new EventSource("/twitter-bubbles/top-words");
 
     eventSource.onmessage = function (e) {
-        console.log("Processing message: ", e.data);
+        console.log("Processing top words: ", e.data);
         render(JSON.parse(e.data));
     };
 
     eventSource.onerror = function (e) {
-        console.log("EventSource failed.", e);
+        console.log("Top words event source failed.", e);
     };
 };
 
@@ -31,8 +31,8 @@ function drawBubbleChart(root) {
     //
     // How big the chart is
     //
-    var width = 960;
-    var height= 960;
+    var width = $(".bubbles").width();
+    var height = width;
 
     //
     // Pick some colours for the categories (groups)
@@ -48,19 +48,16 @@ function drawBubbleChart(root) {
     var bubble = d3.layout.pack().sort(null).size([width, height]).padding(1.5);
 
     // remove old svg element(s)
-    var oldSvgElements = document.body.getElementsByTagName("svg");
-    for (var i = 0; i < oldSvgElements.length; i++) {
-        document.body.removeChild(oldSvgElements[i]);
-    }
+    $(".d3-bubble-diagram").remove();
 
     //
     // Make a SVG graphic
     //
-    var svg = d3.select("body")
+    var svg = d3.select(".bubbles")
         .append("svg")
         .attr("width", width)
         .attr("height", height)
-        .attr("class", "bubble");
+        .attr("class", "d3-bubble-diagram");
 
     //
     // For each leaf, create a new "node" and place it in the correct
@@ -124,3 +121,6 @@ function render(data) {
     drawBubbleChart(root);
 }
 
+$(document).ready(function() {
+    openTopWordsStream();
+});

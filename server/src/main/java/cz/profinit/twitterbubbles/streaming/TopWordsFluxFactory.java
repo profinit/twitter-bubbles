@@ -13,13 +13,13 @@ import reactor.core.publisher.Flux;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class TopWordsStreamFactory {
+public class TopWordsFluxFactory {
 
     private final TweetStream tweetStream;
     private final TweetProcessor tweetProcessor;
     private final TwitterBubblesProperties properties;
 
-    public Flux<TopWords> createTopWordsStream() {
+    public Flux<TopWords> createTopWordsFlux() {
         log.info("Creating top word stream");
 
         WordCountProcessor wordCountProcessor = new WordCountProcessor(properties);
