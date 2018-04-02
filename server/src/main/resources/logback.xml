@@ -24,7 +24,7 @@
     <logger name="org.springframework" level="INFO"/>
     <logger name="cz.profinit" level="INFO"/>
 
-    <logger name="cz.profinit" level="TRACE">
+    <logger name="cz.profinit" level="DEBUG">
         <appender-ref ref="TWITTER_BUBBLES"/>
     </logger>
 
