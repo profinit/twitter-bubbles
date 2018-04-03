@@ -24,7 +24,10 @@ pipeline {
                             sh "mvn test"
                         } finally {
                             junit '**/target/surefire-reports/*.xml'
-                            currentBuild.result = 'FAILURE'
+                            // make pipeline fail if tests failed, because we do not want to deploy in that case
+                            if (currentBuild.result == 'UNSTABLE'){
+                                currentBuild.result = 'FAILURE'
+                            }
                         }
                     }
                 }
