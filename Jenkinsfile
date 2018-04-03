@@ -21,19 +21,18 @@ pipeline {
                 dir('.') {
                     script {
                         try {
-                            sh "mvn test"
+                            sh "mvn test -Dmaven.test.failure.ignore=true"
                         } finally {
                             junit '**/target/surefire-reports/*.xml'
-                            // make pipeline fail if tests failed, because we do not want to deploy in that case
-                            if (currentBuild.result == 'UNSTABLE'){
-                                currentBuild.result = 'FAILURE'
-                            }
                         }
                     }
                 }
             }
         }
         stage('Deploy') {
+            when {
+                expression { currentBuild.currentResult == 'SUCCESS' }
+            }
             steps {
                 sshPublisher(
                     publishers: [
