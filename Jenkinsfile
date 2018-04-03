@@ -24,9 +24,39 @@ pipeline {
                             sh "mvn test"
                         } finally {
                             junit '**/target/surefire-reports/*.xml'
+                            currentBuild.result = 'FAILURE'
                         }
                     }
                 }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'AWS NoC',
+                            transfers:[
+                                sshTransfer(
+                                    excludes: '',
+                                    execCommand: "systemctl restart twitter-bubbles@${env.BRANCH_NAME}",
+                                    execTimeout: 120000,
+                                    flatten: false,
+                                        makeEmptyDirs: false,
+                                        noDefaultExcludes: false,
+                                        patternSeparator: '[, ]+',
+                                        remoteDirectory: "${env.BRANCH_NAME}",
+                                        remoteDirectorySDF: false,
+                                        removePrefix: 'server/target',
+                                        sourceFiles: 'server/target/*.jar'
+                                )
+                            ],
+                            usePromotionTimestamp: false,
+                            useWorkspaceInPromotion: false,
+                            verbose: true
+                        )
+                    ]
+                )
             }
         }
     }
@@ -35,10 +65,6 @@ pipeline {
             script {
                 // workaround for null currentBuild.result when the result is SUCCESS
                 currentBuild.result = currentBuild.currentResult
-
-                dir('.') {
-                    sh 'mvn clean'
-                }
             }
         }
         changed {
