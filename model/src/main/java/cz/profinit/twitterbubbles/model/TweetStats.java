@@ -13,7 +13,11 @@ import java.util.Map;
 @AllArgsConstructor
 public class TweetStats {
 
-    public static TweetStats EMPTY = new TweetStats(Collections.emptyMap());
+    public static final TweetStats EMPTY = new TweetStats(Collections.emptyMap());
+
+    public static final TweetStats DUMMY = new TweetStats(new HashMap<String, Integer>() {{
+        put("dummy", 1);
+    }});
 
     private Map<String, Integer> wordCounts;
 
