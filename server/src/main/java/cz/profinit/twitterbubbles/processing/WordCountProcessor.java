@@ -28,8 +28,6 @@ public class WordCountProcessor {
     private final Comparator<String> wordCountComparator =
             (a, b) -> wordCount.getOrDefault(b, 0) - wordCount.getOrDefault(a, 0);
     private final Set<String> allWords = new HashSet<>();
-    @Getter
-    private int processedTweetStatsCount = 0;
     private List<String> topWords = Collections.emptyList();
 
     public WordCountProcessor(TwitterBubblesProperties properties) {
@@ -37,8 +35,6 @@ public class WordCountProcessor {
     }
 
     public synchronized TopWords processTweetStats(TweetStats tweetStats) {
-        processedTweetStatsCount++;
-
         updateWordCount(tweetStats);
 
         updateTopWords();

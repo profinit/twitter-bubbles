@@ -1,13 +1,15 @@
-
-var openTopWordsStream = function() {
+var openTopWordsStream = function () {
     // {"topWords":
     //   {"you":8,"the":8,"que":4,"people":3,"this":3,"its":3,"bir":3,"dan":3,"about":2,"via":2,"daha":2,"perempuan":2,"natproductsshow":2,"brahmin":2,"kldaroluna":2}
     // }
     var eventSource = new EventSource("/twitter-bubbles/top-words");
 
     eventSource.onmessage = function (e) {
-        console.log("Processing top words: ", e.data);
-        render(JSON.parse(e.data));
+        // console.log("Processing top words: ", e.data);
+        var data = JSON.parse(e.data);
+        var dataframe = mapEntries(data);
+        renderList(dataframe);
+        renderBubbles(dataframe);
     };
 
     eventSource.onerror = function (e) {
@@ -31,7 +33,7 @@ function drawBubbleChart(root) {
     //
     // How big the chart is
     //
-    var width = $(".bubbles").width();
+    var width = $(".bubbles").width() * 0.8;
     var height = width;
 
     //
@@ -98,9 +100,7 @@ function drawBubbleChart(root) {
         });
 }
 
-function render(data) {
-    var dataframe = mapEntries(data);
-
+function renderBubbles(dataframe) {
     var root = {
         name: "Top Words",
         children: []
@@ -112,7 +112,7 @@ function render(data) {
         var word = dataframe[i][0];
         var count = dataframe[i][1];
         root.children.push({
-            name: word + ": " + count,
+            name: word,
             value: Number(count),
             group: group++
         });
@@ -121,6 +121,21 @@ function render(data) {
     drawBubbleChart(root);
 }
 
-$(document).ready(function() {
+function renderList(dataframe) {
+    var wordsAndCounts = [];
+
+    for (var i = 0; i < dataframe.length; i++) {
+        var word = dataframe[i][0];
+        var count = dataframe[i][1];
+        wordsAndCounts.push($("<div class='word-and-count'><div class='word'>" + word + ":&nbsp;</div><div class='count'>" + count + "&nbsp;</div></div>"));
+    }
+
+    $(".word-and-count").remove();
+
+    $(".words .list").append(wordsAndCounts);
+
+}
+
+$(document).ready(function () {
     openTopWordsStream();
 });
