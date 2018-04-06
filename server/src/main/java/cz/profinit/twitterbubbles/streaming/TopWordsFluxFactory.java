@@ -5,19 +5,25 @@ import cz.profinit.twitterbubbles.model.TopWords;
 import cz.profinit.twitterbubbles.model.TweetStats;
 import cz.profinit.twitterbubbles.processing.TweetProcessor;
 import cz.profinit.twitterbubbles.processing.WordCountProcessor;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
 @Component
-@RequiredArgsConstructor
-@Slf4j
 public class TopWordsFluxFactory {
 
     private final TweetStream tweetStream;
     private final TweetProcessor tweetProcessor;
     private final TwitterBubblesProperties properties;
+
+    private static final Logger log = LoggerFactory.getLogger(TopWordsFluxFactory.class);
+
+    public TopWordsFluxFactory(TweetStream tweetStream, TweetProcessor tweetProcessor, TwitterBubblesProperties properties) {
+        this.tweetStream = tweetStream;
+        this.tweetProcessor = tweetProcessor;
+        this.properties = properties;
+    }
 
     public Flux<TopWords> createTopWordsFlux() {
         log.info("Creating top word stream");

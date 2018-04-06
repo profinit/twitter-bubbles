@@ -1,7 +1,8 @@
 package cz.profinit.twitterbubbles.processing;
 
 import cz.profinit.twitterbubbles.model.TweetStats;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Component;
 
@@ -14,10 +15,11 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.reducing;
 
 @Component
-@Slf4j
 public class TweetProcessor {
 
     private final AtomicInteger counter = new AtomicInteger(1);
+
+    private static final Logger log = LoggerFactory.getLogger(TweetProcessor.class);
 
     public TweetStats processTweet(Tweet tweet) {
         log.trace("Processing tweet number {}. Id: {}", counter.getAndIncrement(), tweet.getId());

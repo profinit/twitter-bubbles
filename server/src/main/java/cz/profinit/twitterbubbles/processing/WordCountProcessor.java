@@ -3,8 +3,6 @@ package cz.profinit.twitterbubbles.processing;
 import cz.profinit.twitterbubbles.TwitterBubblesProperties;
 import cz.profinit.twitterbubbles.model.TopWords;
 import cz.profinit.twitterbubbles.model.TweetStats;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,12 +16,10 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Slf4j
 public class WordCountProcessor {
 
     private final TwitterBubblesProperties properties;
 
-    @Getter
     private final Map<String, Integer> wordCount = new HashMap<>();
     private final Comparator<String> wordCountComparator =
             (a, b) -> wordCount.getOrDefault(b, 0) - wordCount.getOrDefault(a, 0);

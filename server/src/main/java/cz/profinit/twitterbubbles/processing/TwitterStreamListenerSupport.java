@@ -1,16 +1,18 @@
 package cz.profinit.twitterbubbles.processing;
 
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.social.twitter.api.StreamDeleteEvent;
 import org.springframework.social.twitter.api.StreamListener;
 import org.springframework.social.twitter.api.StreamWarningEvent;
 import org.springframework.social.twitter.api.Tweet;
 
-@RequiredArgsConstructor
 public class TwitterStreamListenerSupport implements StreamListener {
 
     private final Logger log;
+
+    public TwitterStreamListenerSupport(Logger log) {
+        this.log = log;
+    }
 
     @Override
     public void onTweet(Tweet tweet) {

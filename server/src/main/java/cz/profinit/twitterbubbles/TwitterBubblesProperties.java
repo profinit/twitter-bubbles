@@ -1,21 +1,21 @@
 package cz.profinit.twitterbubbles;
 
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
 @Component
-@Data
-@Slf4j
 public class TwitterBubblesProperties {
 
     private final int minWordLength;
     private final int tweetStatsCountToTriggerTopWordsUpdate;
     private final int topWordCountToKeep;
     private final int topWordCountToTriggerPruning;
+
+    private static final Logger log = LoggerFactory.getLogger(TwitterBubblesProperties.class);
 
     public TwitterBubblesProperties(
             @Value("${twitter.bubbles.minWordLength}") int minWordLength,
@@ -27,6 +27,22 @@ public class TwitterBubblesProperties {
         this.tweetStatsCountToTriggerTopWordsUpdate = tweetStatsCountToTriggerTopWordsUpdate;
         this.topWordCountToKeep = topWordCountToKeep;
         this.topWordCountToTriggerPruning = topWordCountToTriggerPruning;
+    }
+
+    public int getMinWordLength() {
+        return minWordLength;
+    }
+
+    public int getTweetStatsCountToTriggerTopWordsUpdate() {
+        return tweetStatsCountToTriggerTopWordsUpdate;
+    }
+
+    public int getTopWordCountToKeep() {
+        return topWordCountToKeep;
+    }
+
+    public int getTopWordCountToTriggerPruning() {
+        return topWordCountToTriggerPruning;
     }
 
     @PostConstruct

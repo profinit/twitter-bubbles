@@ -1,8 +1,8 @@
 package cz.profinit.twitterbubbles.writer;
 
 import cz.profinit.twitterbubbles.processing.TwitterStreamListenerSupport;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.social.twitter.api.StreamListener;
 import org.springframework.social.twitter.api.Tweet;
@@ -11,11 +11,15 @@ import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
-@Slf4j
 public class SimpleTweetWriter implements CommandLineRunner {
 
     private final TwitterTemplate twitterTemplate;
+
+    private static final Logger log = LoggerFactory.getLogger(SimpleTweetWriter.class);
+
+    public SimpleTweetWriter(TwitterTemplate twitterTemplate) {
+        this.twitterTemplate = twitterTemplate;
+    }
 
     @Override
     public void run(String... args) {

@@ -2,7 +2,6 @@ package cz.profinit.twitterbubbles.client;
 
 import cz.profinit.twitterbubbles.model.TopWords;
 import cz.profinit.twitterbubbles.model.TweetStats;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -11,7 +10,6 @@ import reactor.core.publisher.Flux;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Slf4j
 public class StandaloneClientApplication {
 
     public static void main(String[] args) throws InterruptedException {

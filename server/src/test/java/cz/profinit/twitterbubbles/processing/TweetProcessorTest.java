@@ -1,7 +1,6 @@
 package cz.profinit.twitterbubbles.processing;
 
 import cz.profinit.twitterbubbles.model.TweetStats;
-import lombok.Data;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.social.twitter.api.Tweet;
@@ -104,11 +103,20 @@ public class TweetProcessorTest {
         return new Tweet(1L, testCase.text, new Date(), "user", "url", 1L, 1L, "x", "s");
     }
 
-    @Data(staticConstructor = "of")
     private static class WordSplitTestCase {
 
         private final String text;
         private final List<String> words;
         private final Map<String, Integer> wordCounts;
+
+        public static WordSplitTestCase of(String text, List<String> words, Map<String, Integer> wordCounts) {
+            return new WordSplitTestCase(text, words, wordCounts);
+        }
+
+        private WordSplitTestCase(String text, List<String> words, Map<String, Integer> wordCounts) {
+            this.text = text;
+            this.words = words;
+            this.wordCounts = wordCounts;
+        }
     }
 }

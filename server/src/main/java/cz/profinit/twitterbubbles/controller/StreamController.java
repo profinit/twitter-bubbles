@@ -3,8 +3,8 @@ package cz.profinit.twitterbubbles.controller;
 import cz.profinit.twitterbubbles.model.TopWords;
 import cz.profinit.twitterbubbles.streaming.TopWordsFluxFactory;
 import cz.profinit.twitterbubbles.streaming.TweetStream;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,12 +16,17 @@ import java.io.IOException;
 
 @RestController
 @CrossOrigin
-@RequiredArgsConstructor
-@Slf4j
 public class StreamController {
 
     private final TweetStream tweetStream;
     private final TopWordsFluxFactory topWordsFluxFactory;
+
+    private static final Logger log = LoggerFactory.getLogger(StreamController.class);
+
+    public StreamController(TweetStream tweetStream, TopWordsFluxFactory topWordsFluxFactory) {
+        this.tweetStream = tweetStream;
+        this.topWordsFluxFactory = topWordsFluxFactory;
+    }
 
     @GetMapping("/tweets")
     public Flux<Tweet> streamTweets() {

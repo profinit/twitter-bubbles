@@ -1,7 +1,8 @@
 package cz.profinit.twitterbubbles.streaming;
 
 import cz.profinit.twitterbubbles.processing.TwitterStreamListenerSupport;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.social.twitter.api.Stream;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.impl.TwitterTemplate;
@@ -14,7 +15,6 @@ import java.util.List;
 import static java.util.Collections.singletonList;
 
 @Component
-@Slf4j
 public class TwitterListener extends TwitterStreamListenerSupport {
 
     private final TwitterTemplate twitterTemplate;
@@ -23,6 +23,8 @@ public class TwitterListener extends TwitterStreamListenerSupport {
 
     private Stream twitterStream;
     private int counter = 1;
+
+    private static final Logger log = LoggerFactory.getLogger(TwitterListener.class);
 
     public TwitterListener(TwitterTemplate twitterTemplate) {
         super(log);
