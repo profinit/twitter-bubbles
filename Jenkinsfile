@@ -1,31 +1,4 @@
 #!/usr/bin/env groovy
-def notifyStatusChangedViaEmail(buildStatus) {
-    if (buildStatus != 'SUCCESS') {
-        sendEmail(buildStatus)
-    }
-}
-
-def sendEmail(buildStatus, deployment=false){
-    def emailBody = "Email from Jenkins.<br>\nProject: ${env.JOB_NAME}<br>\nBuild Number: ${env.BUILD_NUMBER}<br>\nURL of build: ${env.BUILD_URL}"
-    if (deployment) {
-        def props = readProperties file: 'server/src/main/resources/application.properties'
-        def port = props['server.port']
-        def contextPath = props['server.servlet.context-path']
-        def applicationUrl = "http://${env.DEPLOYMENT_HOSTNAME}:${port}${contextPath}"
-
-        emailBody += "<br>\nApplication URL: ${applicationUrl}" +
-                "<br>\nApplication info: ${applicationUrl}/actuator/info"
-    }
-
-    emailext (
-            subject: "Jenkins ${env.JOB_NAME} is ${buildStatus}",
-            body: "${emailBody}",
-            recipientProviders: [
-                    [$class: 'DevelopersRecipientProvider']
-            ]
-    )
-}
-
 pipeline {
     agent any
     tools {
@@ -106,4 +79,31 @@ pipeline {
             sendEmail("${currentBuild.result}", true)
         }
     }
+}
+
+def notifyStatusChangedViaEmail(buildStatus) {
+    if (buildStatus != 'SUCCESS') {
+        sendEmail(buildStatus)
+    }
+}
+
+def sendEmail(buildStatus, deployment=false){
+    def emailBody = "Email from Jenkins.<br>\nProject: ${env.JOB_NAME}<br>\nBuild Number: ${env.BUILD_NUMBER}<br>\nURL of build: ${env.BUILD_URL}"
+    if (deployment) {
+        def props = readProperties file: 'server/src/main/resources/application.properties'
+        def port = props['server.port']
+        def contextPath = props['server.servlet.context-path']
+        def applicationUrl = "http://${env.DEPLOYMENT_HOSTNAME}:${port}${contextPath}"
+
+        emailBody += "<br>\nApplication URL: ${applicationUrl}" +
+                "<br>\nApplication info: ${applicationUrl}/actuator/info"
+    }
+
+    emailext (
+            subject: "Jenkins ${env.JOB_NAME} is ${buildStatus}",
+            body: "${emailBody}",
+            recipientProviders: [
+                    [$class: 'DevelopersRecipientProvider']
+            ]
+    )
 }
