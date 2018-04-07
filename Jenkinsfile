@@ -1,9 +1,35 @@
 #!/usr/bin/env groovy
+def notifyStatusChangedViaEmail(buildStatus) {
+    if (buildStatus != 'SUCCESS') {
+        sendEmail(buildStatus)
+    }
+}
+
+def sendEmail(buildStatus, deployment=false){
+    def emailBody = "Email from Jenkins. Project: ${env.JOB_NAME}, Build Number: ${env.BUILD_NUMBER}, URL of build: ${env.BUILD_URL}"
+    if (deployment) {
+        def applicationUrl = "${env.DEPLOYMENT_HOSTNAME}:8080/twitter-bubbles"
+        emailBody += "\n\nApplication has been deployed to ${applicationUrl}\n" +
+                "Build info: ${applicationUrl}"
+    }
+
+    emailext (
+            subject: "Jenkins ${env.JOB_NAME} is ${buildStatus}",
+            body: "${emailBody}",
+            recipientProviders: [
+                    [$class: 'DevelopersRecipientProvider']
+            ]
+    )
+}
+
 pipeline {
     agent any
     tools {
         maven 'Maven'
         jdk 'JDK'
+    }
+    environment {
+        DEPLOYMENT_HOSTNAME = '52.16.190.152'
     }
     options {
         buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '5'))
@@ -70,8 +96,10 @@ pipeline {
             }
         }
         changed {
-            emailext body: "Email from Jenkins. Project: ${env.JOB_NAME}, Build Number: ${env.BUILD_NUMBER}, URL of build: ${env.BUILD_URL}", recipientProviders: [[$class: 'DevelopersRecipientProvider']], subject: "Jenkins ${env.JOB_NAME} is ${currentBuild.result}"
-
+            notifyStatusChangedViaEmail(${currentBuild.result})
+        }
+        success {
+            sendEmail(${currentBuild.result}, true)
         }
     }
 }
