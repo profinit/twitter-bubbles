@@ -6,15 +6,15 @@ def notifyStatusChangedViaEmail(buildStatus) {
 }
 
 def sendEmail(buildStatus, deployment=false){
-    def emailBody = "Email from Jenkins.\nProject: ${env.JOB_NAME}\nBuild Number: ${env.BUILD_NUMBER}\nURL of build: ${env.BUILD_URL}"
+    def emailBody = "Email from Jenkins.<br>\nProject: ${env.JOB_NAME}<br>\nBuild Number: ${env.BUILD_NUMBER}<br>\nURL of build: ${env.BUILD_URL}"
     if (deployment) {
         def props = readProperties file: 'server/src/main/resources/application.properties'
         def port = props['server.port']
         def contextPath = props['server.servlet.context-path']
         def applicationUrl = "http://${env.DEPLOYMENT_HOSTNAME}:${port}${contextPath}"
 
-        emailBody += "\nApplication URL: ${applicationUrl}" +
-                "\nApplication info: ${applicationUrl}/actuator/info"
+        emailBody += "<br>\nApplication URL: ${applicationUrl}" +
+                "<br>\nApplication info: ${applicationUrl}/actuator/info"
     }
 
     emailext (
