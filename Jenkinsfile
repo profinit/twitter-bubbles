@@ -96,10 +96,10 @@ pipeline {
             }
         }
         changed {
-            notifyStatusChangedViaEmail(${currentBuild.result})
+            notifyStatusChangedViaEmail("${currentBuild.result}")
         }
         success {
-            sendEmail(${currentBuild.result}, true)
+            sendEmail("${currentBuild.result}", true)
         }
     }
 }
