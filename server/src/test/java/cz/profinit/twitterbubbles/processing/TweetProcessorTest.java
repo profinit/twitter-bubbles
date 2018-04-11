@@ -72,24 +72,6 @@ public class TweetProcessorTest {
     }
 
     @Test
-    public void shouldCountWords() {
-        for (WordSplitTestCase testCase : testCases) {
-            Map<String, Integer> wordCounts = processor.countWords(testCase.words);
-
-            assertEquals("Expected different word counts", testCase.wordCounts, wordCounts);
-        }
-    }
-
-    @Test
-    public void shouldSplitTextIntoWords() {
-        for (WordSplitTestCase testCase : testCases) {
-            List<String> words = processor.words(testCase.text);
-
-            assertEquals("Expected different words", testCase.words, words);
-        }
-    }
-
-    @Test
     public void shouldProcessTweet() {
         for (WordSplitTestCase testCase : testCases) {
             TweetStats tweetStats = processor.processTweet(tweet(testCase));
