@@ -33,8 +33,7 @@ function drawBubbleChart(root) {
     //
     // How big the chart is
     //
-    var width = $(".bubbles").width() * 0.8;
-    var height = width;
+    var size = Math.min($(".bubbles").width(), $(".bubbles").height()) * 0.9;
 
     //
     // Pick some colours for the categories (groups)
@@ -47,7 +46,7 @@ function drawBubbleChart(root) {
     // indicating where to draw them (x,y), and how big to draw them (r).
     // This is worked out using the "value" property of each leaf.
     //
-    var bubble = d3.layout.pack().sort(null).size([width, height]).padding(1.5);
+    var bubble = d3.layout.pack().sort(null).size([size, size]).padding(1.5);
 
     // remove old svg element(s)
     $(".d3-bubble-diagram").remove();
@@ -57,8 +56,8 @@ function drawBubbleChart(root) {
     //
     var svg = d3.select(".bubbles")
         .append("svg")
-        .attr("width", width)
-        .attr("height", height)
+        .attr("width", size)
+        .attr("height", size)
         .attr("class", "d3-bubble-diagram");
 
     //

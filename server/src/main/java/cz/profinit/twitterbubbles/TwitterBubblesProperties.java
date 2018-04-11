@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 @Component
 public class TwitterBubblesProperties {
 
+    private final String applicationName;
     private final int minWordLength;
     private final int tweetStatsCountToTriggerTopWordsUpdate;
     private final int topWordCountToKeep;
@@ -18,15 +19,21 @@ public class TwitterBubblesProperties {
     private static final Logger log = LoggerFactory.getLogger(TwitterBubblesProperties.class);
 
     public TwitterBubblesProperties(
+            @Value("${info.app.name}") String applicationName,
             @Value("${twitter.bubbles.minWordLength}") int minWordLength,
             @Value("${twitter.bubbles.tweetStatsCountToTriggerTopWordsUpdate}") int tweetStatsCountToTriggerTopWordsUpdate,
             @Value("${twitter.bubbles.topWordCountToKeep}") int topWordCountToKeep,
             @Value("${twitter.bubbles.topWordCountToTriggerPruning}") int topWordCountToTriggerPruning) {
 
+        this.applicationName = applicationName;
         this.minWordLength = minWordLength;
         this.tweetStatsCountToTriggerTopWordsUpdate = tweetStatsCountToTriggerTopWordsUpdate;
         this.topWordCountToKeep = topWordCountToKeep;
         this.topWordCountToTriggerPruning = topWordCountToTriggerPruning;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
     }
 
     public int getMinWordLength() {
@@ -53,7 +60,8 @@ public class TwitterBubblesProperties {
     @Override
     public String toString() {
         return "TwitterBubblesProperties{" +
-                "minWordLength=" + minWordLength +
+                "applicationName=" + applicationName +
+                ", minWordLength=" + minWordLength +
                 ", tweetStatsCountToTriggerTopWordsUpdate=" + tweetStatsCountToTriggerTopWordsUpdate +
                 ", topWordCountToKeep=" + topWordCountToKeep +
                 ", topWordCountToTriggerPruning=" + topWordCountToTriggerPruning +

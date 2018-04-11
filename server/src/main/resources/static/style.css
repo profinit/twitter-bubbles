@@ -1,4 +1,8 @@
 
+.header {
+    text-align: center;
+}
+
 .content {
     width: 100%;
 }
@@ -17,9 +21,10 @@
 
 .words .list {
     width: 100%;
-    height: 15%;
-    float: top;
+    height: 20%;
+    float: right;
     font-size: small;
+    overflow: hidden;
 }
 
 .words .list .word-and-count {
@@ -38,8 +43,8 @@
 
 .words .tweets {
     width: 100%;
-    height: 80%;
-    float: top;
+    height: 70%;
+    float: right;
     font-size: x-small;
     overflow: hidden;
 }
