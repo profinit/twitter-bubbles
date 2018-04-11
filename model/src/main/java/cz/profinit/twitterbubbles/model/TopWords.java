@@ -16,4 +16,11 @@ public class TopWords {
     public Map<String, Integer> getTopWords() {
         return topWords;
     }
+
+    @Override
+    public String toString() {
+        return "TopWords{" +
+                "topWords=" + topWords +
+                '}';
+    }
 }

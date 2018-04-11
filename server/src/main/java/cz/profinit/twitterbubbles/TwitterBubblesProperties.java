@@ -49,4 +49,14 @@ public class TwitterBubblesProperties {
     public void log() {
         log.info("{}", toString());
     }
+
+    @Override
+    public String toString() {
+        return "TwitterBubblesProperties{" +
+                "minWordLength=" + minWordLength +
+                ", tweetStatsCountToTriggerTopWordsUpdate=" + tweetStatsCountToTriggerTopWordsUpdate +
+                ", topWordCountToKeep=" + topWordCountToKeep +
+                ", topWordCountToTriggerPruning=" + topWordCountToTriggerPruning +
+                '}';
+    }
 }

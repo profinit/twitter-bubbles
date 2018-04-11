@@ -31,4 +31,11 @@ public class TweetStats {
                 mergedWordCounts.merge(word, count, (count1, count2) -> count1 + count2));
         return new TweetStats(mergedWordCounts);
     }
+
+    @Override
+    public String toString() {
+        return "TweetStats{" +
+                "wordCounts=" + wordCounts +
+                '}';
+    }
 }
