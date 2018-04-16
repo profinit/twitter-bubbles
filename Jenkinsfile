@@ -71,8 +71,6 @@ pipeline {
                 // workaround for null currentBuild.result when the result is SUCCESS
                 currentBuild.result = currentBuild.currentResult
             }
-        }
-        changed {
             notifyStatusChangedViaEmail("${currentBuild.result}")
         }
         success {
