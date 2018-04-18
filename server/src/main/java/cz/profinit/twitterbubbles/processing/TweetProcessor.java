@@ -6,24 +6,40 @@ import org.slf4j.LoggerFactory;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.reducing;
+
 @Component
 public class TweetProcessor {
+
+    private final AtomicInteger counter = new AtomicInteger(1);
 
     private static final Logger log = LoggerFactory.getLogger(TweetProcessor.class);
 
     public TweetStats processTweet(Tweet tweet) {
-        log.trace("Processing tweet: {}", tweet.getText());
+        log.trace("Processing tweet number {}. Id: {}", counter.getAndIncrement(), tweet.getId());
 
-        String text = tweet.getText();
+        List<String> words = words(tweet.getText());
 
-        // TODO Rozdělení textu do slov a spočítání počtu jejich výskytů.
-        // TODO Implementace je hotová, pokud uspěje unit test TweeProcessorTest.
+        Map<String, Integer> wordCounts = countWords(words);
 
-        // TODO Jak vrátit výsledek
-        // Map<String, Integer> wordCounts = new HashMap<>();
-        // return new TweetStats(wordCounts);
+        return new TweetStats(wordCounts);
+    }
 
-        // Prázdná implementace vrací slovo dummu v počtu 1
-        return TweetStats.DUMMY;
+    List<String> words(String text) {
+        String[] words = text.split("\\s+");
+        for (int i = 0; i < words.length; i++) {
+            words[i] = words[i].replaceAll("[^\\w]", "");
+        }
+        return Arrays.asList(words);
+    }
+
+    Map<String, Integer> countWords(List<String> words) {
+        return words.stream().map(String::toLowerCase).collect(groupingBy(word -> word, reducing(0, e -> 1, Integer::sum)));
     }
 }
