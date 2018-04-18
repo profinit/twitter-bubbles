@@ -19,6 +19,11 @@ public class TweetProcessor {
         // TODO Rozdělení textu do slov a spočítání počtu jejich výskytů.
         // TODO Implementace je hotová, pokud uspěje unit test TweeProcessorTest.
 
+        // TODO Jak vrátit výsledek
+        // Map<String, Integer> wordCounts = new HashMap<>();
+        // return new TweetStats(wordCounts);
+
+        // Prázdná implementace vrací slovo dummu v počtu 1
         return TweetStats.DUMMY;
     }
 }

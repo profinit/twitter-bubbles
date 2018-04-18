@@ -7,10 +7,8 @@ import org.springframework.social.twitter.api.Tweet;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -19,7 +17,6 @@ public class TweetProcessorTest {
     private static final WordSplitTestCase[] testCases = {
             WordSplitTestCase.of(
                     "Kobyla ma maly bok.",
-                    asList("Kobyla", "ma", "maly", "bok"),
                     new HashMap<String, Integer>() {{
                         put("kobyla", 1);
                         put("ma", 1);
@@ -28,7 +25,6 @@ public class TweetProcessorTest {
                     }}),
             WordSplitTestCase.of(
                     "A man, a plan, a canal: Panama!",
-                    asList("A", "man", "a", "plan", "a", "canal", "Panama"),
                     new HashMap<String, Integer>() {{
                         put("a", 3);
                         put("man", 1);
@@ -41,10 +37,6 @@ public class TweetProcessorTest {
                             "Four little, five little, six little Indians, " +
                             "Seven little, eight little, nine little Indians, " +
                             "Ten little Indian boys.",
-                    asList("One", "little", "two", "little", "three", "little", "Indians",
-                            "Four", "little", "five", "little", "six", "little", "Indians",
-                            "Seven", "little", "eight", "little", "nine", "little", "Indians",
-                            "Ten", "little", "Indian", "boys"),
                     new HashMap<String, Integer>() {{
                         put("one", 1);
                         put("two", 1);
@@ -88,16 +80,14 @@ public class TweetProcessorTest {
     private static class WordSplitTestCase {
 
         private final String text;
-        private final List<String> words;
         private final Map<String, Integer> wordCounts;
 
-        public static WordSplitTestCase of(String text, List<String> words, Map<String, Integer> wordCounts) {
-            return new WordSplitTestCase(text, words, wordCounts);
+        public static WordSplitTestCase of(String text, Map<String, Integer> wordCounts) {
+            return new WordSplitTestCase(text, wordCounts);
         }
 
-        private WordSplitTestCase(String text, List<String> words, Map<String, Integer> wordCounts) {
+        private WordSplitTestCase(String text, Map<String, Integer> wordCounts) {
             this.text = text;
-            this.words = words;
             this.wordCounts = wordCounts;
         }
     }
