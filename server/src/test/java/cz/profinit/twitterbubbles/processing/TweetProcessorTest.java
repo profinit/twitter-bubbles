@@ -1,11 +1,8 @@
 package cz.profinit.twitterbubbles.processing;
 
-import cz.profinit.twitterbubbles.model.TweetStats;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.social.twitter.api.Tweet;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,15 +63,11 @@ public class TweetProcessorTest {
     @Test
     public void shouldProcessTweet() {
         for (WordSplitTestCase testCase : testCases) {
-            TweetStats tweetStats = processor.processTweet(tweet(testCase));
+            Map<String, Integer> wordCounts = processor.processTweetText(testCase.text);
 
-            assertNotNull("Null tweet stats", tweetStats);
-            assertEquals("Expected different word counts", testCase.wordCounts, tweetStats.getWordCounts());
+            assertNotNull("Null word counts", wordCounts);
+            assertEquals("Expected different word counts", testCase.wordCounts, wordCounts);
         }
-    }
-
-    private Tweet tweet(WordSplitTestCase testCase) {
-        return new Tweet(1L, testCase.text, new Date(), "user", "url", 1L, 1L, "x", "s");
     }
 
     private static class WordSplitTestCase {
