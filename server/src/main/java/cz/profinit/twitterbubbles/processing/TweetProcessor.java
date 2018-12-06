@@ -18,6 +18,12 @@ public class TweetProcessor {
     private static final Logger log = LoggerFactory.getLogger(TweetProcessor.class);
     private final AtomicInteger counter = new AtomicInteger(1);
 
+    /**
+     * Splits the provided text into words and counts their occurrences.
+     *
+     * @param text Tweet text.
+     * @return Word to occurrence count map. When no words founds, the method should return an empty map, but never {@code null}.
+     */
     public Map<String, Integer> processTweetText(String text) {
         log.trace("Processing tweet number {}", counter.getAndIncrement());
 
