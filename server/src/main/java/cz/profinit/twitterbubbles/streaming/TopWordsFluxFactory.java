@@ -7,6 +7,7 @@ import cz.profinit.twitterbubbles.processing.TweetProcessor;
 import cz.profinit.twitterbubbles.processing.WordCountProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
@@ -31,7 +32,9 @@ public class TopWordsFluxFactory {
         WordCountProcessor wordCountProcessor = new WordCountProcessor(properties);
 
         return tweetStream.getTweets()
-                .map(tweetProcessor::processTweet)
+                .map(Tweet::getText)
+                .map(tweetProcessor::processTweetText)
+                .map(TweetStats::new)
                 .window(properties.getTweetStatsCountToTriggerTopWordsUpdate())
                 .flatMap(tweetStatsFlux -> tweetStatsFlux.reduce(TweetStats.EMPTY, TweetStats::merge))
                 .map(wordCountProcessor::processTweetStats);
