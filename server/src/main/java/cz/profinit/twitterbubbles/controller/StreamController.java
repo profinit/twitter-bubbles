@@ -19,13 +19,13 @@ import java.io.IOException;
 public class StreamController {
 
     private final TweetStream tweetStream;
-    private final TopWordsFluxFactory topWordsFluxFactory;
+    private final Flux<TopWords> topWordsFlux;
 
     private static final Logger log = LoggerFactory.getLogger(StreamController.class);
 
     public StreamController(TweetStream tweetStream, TopWordsFluxFactory topWordsFluxFactory) {
         this.tweetStream = tweetStream;
-        this.topWordsFluxFactory = topWordsFluxFactory;
+        this.topWordsFlux = topWordsFluxFactory.createTopWordsFlux();
     }
 
     @GetMapping("/tweets")
@@ -37,7 +37,7 @@ public class StreamController {
     @GetMapping("/top-words")
     public Flux<TopWords> streamTopWords() {
         log.info("Streaming top words");
-        return topWordsFluxFactory.createTopWordsFlux();
+        return topWordsFlux;
     }
 
     @ExceptionHandler(IOException.class)

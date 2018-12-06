@@ -23,8 +23,8 @@ public class TweetStreamFactory {
     public TweetStream tweetStream() {
         log.info("Creating tweet stream");
 
-        Flux<Tweet> flux = Flux.<Tweet>create(twitterListener::addSink, FluxSink.OverflowStrategy.LATEST)
-                .log(TweetStream.getLoggerName());
+        Flux<Tweet> flux = Flux.create(twitterListener::start, FluxSink.OverflowStrategy.LATEST)
+                .share();
 
         return TweetStream.of(flux);
     }

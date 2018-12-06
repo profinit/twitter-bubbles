@@ -9,8 +9,7 @@ import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.FluxSink;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.PreDestroy;
 
 import static java.util.Collections.singletonList;
 
@@ -18,9 +17,7 @@ import static java.util.Collections.singletonList;
 public class TwitterListener extends TwitterStreamListenerSupport {
 
     private final TwitterTemplate twitterTemplate;
-
-    private final List<FluxSink<Tweet>> sinks = new ArrayList<>();
-
+    private FluxSink<Tweet> sink;
     private Stream twitterStream;
     private int counter = 1;
 
@@ -31,33 +28,21 @@ public class TwitterListener extends TwitterStreamListenerSupport {
         this.twitterTemplate = twitterTemplate;
     }
 
-    public synchronized void addSink(FluxSink<Tweet> sink) {
-        log.debug("Adding sink: {}", sink);
-        sinks.add(sink);
-        if (sinks.size() == 1) {
-            log.info("Streaming Twitter sample data");
-            twitterStream = twitterTemplate.streamingOperations().sample(singletonList(this));
-        }
+    public void start(FluxSink<Tweet> sink) {
+        log.info("Streaming Twitter sample data");
+        this.sink = sink;
+        twitterStream = twitterTemplate.streamingOperations().sample(singletonList(this));
     }
 
-    public synchronized void removeSink(FluxSink<Tweet> sink) {
-        log.debug("Removing sink: {}", sink);
-        sinks.remove(sink);
-        if (sinks.isEmpty() && twitterStream != null) {
-            twitterStream.close();
-            twitterStream = null;
-        }
+    @PreDestroy
+    public void stop() {
+        log.info("Stopping streaming Twitter sample data");
+        twitterStream.close();
     }
 
     @Override
     public void onTweet(Tweet tweet) {
-        log.trace("Putting tweet number {} to {} sinks. Id: {}", counter++, sinks.size(), tweet.getId());
-        sinks.forEach(sink -> {
-            if (!sink.isCancelled()) {
-                sink.next(tweet);
-            } else {
-                removeSink(sink);
-            }
-        });
+        log.trace("Putting tweet number {} to sink. Id: {}", counter++, tweet.getId());
+        sink.next(tweet);
     }
 }

@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class WordCountProcessor {
+public class WordCountAggregator {
 
     private final TwitterBubblesProperties properties;
 
@@ -26,11 +26,11 @@ public class WordCountProcessor {
     private final Set<String> allWords = new HashSet<>();
     private List<String> topWords = Collections.emptyList();
 
-    public WordCountProcessor(TwitterBubblesProperties properties) {
+    public WordCountAggregator(TwitterBubblesProperties properties) {
         this.properties = properties;
     }
 
-    public synchronized TopWords processTweetStats(TweetStats tweetStats) {
+    public TopWords aggregateTweetStats(TweetStats tweetStats) {
         updateWordCount(tweetStats);
 
         updateTopWords();
