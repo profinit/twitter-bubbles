@@ -27,7 +27,6 @@
 	<modules>
 		<module>model</module>
 		<module>server</module>
-		<module>client</module>
 	</modules>
 
 	<dependencyManagement>
