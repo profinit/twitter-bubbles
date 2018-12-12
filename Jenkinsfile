@@ -32,6 +32,15 @@ pipeline {
                 }
             }
         }
+        stage('SonarQube analysis') {
+            steps {
+                dir('.') {
+                    script {
+                        sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
+                    }
+                }
+            }
+        }
         stage('Deploy') {
             when {
                 expression { currentBuild.currentResult == 'SUCCESS' }
