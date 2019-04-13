@@ -15,7 +15,7 @@ pipeline {
         stage('Build') {
             steps {
                 dir('.') {
-                    sh "mvn clean install -DskipTests"
+                    sh "mvn -B clean install -DskipTests"
                 }
             }
         }
@@ -24,7 +24,7 @@ pipeline {
                 dir('.') {
                     script {
                         try {
-                            sh "mvn test -Dmaven.test.failure.ignore=true"
+                            sh "mvn -B test -Dmaven.test.failure.ignore=true"
                         } finally {
                             junit '**/target/surefire-reports/*.xml'
                         }
