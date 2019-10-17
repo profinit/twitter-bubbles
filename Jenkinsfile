@@ -6,7 +6,7 @@ pipeline {
         jdk 'JDK'
     }
     environment {
-        DEPLOYMENT_HOSTNAME = '52.16.190.152'
+        DEPLOYMENT_HOSTNAME = '99.81.60.98'
     }
     options {
         buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '5'))
