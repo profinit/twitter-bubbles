@@ -1,11 +1,17 @@
 package cz.profinit.twitterbubbles.processing;
 
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.reducing;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.function.Function;
 
 @Component
 public class TweetProcessor {
@@ -21,9 +27,9 @@ public class TweetProcessor {
     public Map<String, Integer> processTweetText(String text) {
         log.trace("Processing tweet");
 
-        // TODO Rozdělení textu do slov a spočítání počtu jejich výskytů.
-        // TODO Implementace je hotová, pokud uspěje unit test TweeProcessorTest.
-
-        return Collections.emptyMap();
+        String trimmedText = text.replaceAll("[^A-Za-z0-9 ]", "");
+        return Arrays.stream(trimmedText.split("[_,\\- ]"))
+                .map(String::toLowerCase)
+                .collect(groupingBy(Function.identity(), reducing(0, e -> 1, Integer::sum)));
     }
 }
