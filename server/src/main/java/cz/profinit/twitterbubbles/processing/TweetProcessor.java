@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -22,8 +24,22 @@ public class TweetProcessor {
         log.trace("Processing tweet");
 
         // TODO Rozdělení textu do slov a spočítání počtu jejich výskytů.
+        String words[] = text.split(" ");
+        Map<String, Integer> map = new HashMap<>();
+        Integer n = 1;
+        for (String word : words) {
+            word = word.toLowerCase().replaceAll("[^a-zA-Z0-9]","");
+            if (map.get(word) != null) {
+                Integer count = map.get(word);
+                map.put(word, count+1);
+            }
+            else {
+                map.put(word,1);
+            }
+        }
+
         // TODO Implementace je hotová, pokud uspěje unit test TweeProcessorTest.
 
-        return Collections.emptyMap();
+        return map;
     }
 }
