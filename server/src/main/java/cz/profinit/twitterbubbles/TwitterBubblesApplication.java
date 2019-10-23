@@ -12,3 +12,5 @@ public class TwitterBubblesApplication {
 		SpringApplication.run(TwitterBubblesApplication.class, args);
 	}
 }
+
+// http://localhost:8090/twitter-bubbles/
